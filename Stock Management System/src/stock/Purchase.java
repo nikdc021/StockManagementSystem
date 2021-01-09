@@ -1,15 +1,13 @@
 package stock;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Scanner;
 
 class Purchase {
 	
-	Scanner sc = new Scanner(System.in);
-	int choice = 0;
-	String itemName = new String();
-	DatabaseConnect dc = new DatabaseConnect();
+	private Scanner sc = new Scanner(System.in);
+	private int choice = 0;
+	private String itemName = new String();
+	private CRUDProduct proOperate = new CRUDProduct();
 	
 	void purchase() {
 		
@@ -20,40 +18,26 @@ class Purchase {
 			itemName = sc.next();
 			int stock;
 
-			// check whether product exists in database
-			try {
-				PreparedStatement ps1 = dc.conn.prepareStatement("select * from products where name = ?");
-				ps1.setString(1, itemName);
-				ResultSet rs = ps1.executeQuery();
+			if (proOperate.checkExistance(itemName)) {
+				System.out.println("How many quantity you purchased?");
+				stock = sc.nextInt();
 
-				if (rs.next()) {
-					System.out.println("How many quantity you purchased?");
-					stock = sc.nextInt();
+				int x = proOperate.purchase(stock,itemName);
 
-					// product stock updated in database
-					PreparedStatement ps = dc.conn.prepareStatement("update products set stock = stock + ? where name = ?");
-					ps.setString(2, itemName);
-					ps.setInt(1, stock);
-					int x = ps.executeUpdate();
-
-					if (x > 0) {
-						System.out.println("Product Purchased successfully!");
-					} else {
-						System.out.println("Product Purchase failed!");
-					}
+				if (x > 0) {
+					System.out.println("Product Purchased successfully!");
 				} else {
-					System.out.println("The Product Doesn't Exists!");
+					System.out.println("Product Purchase failed!");
 				}
-
-				System.out.println("Do you want to purchase more product?");
-				System.out.println("1) Yes");
-				System.out.println("2) No");
-
-				choice = sc.nextInt();
-
-			} catch (Exception e) {
-				System.out.println(e);
+			} else {
+				System.out.println("The Product Doesn't Exists!");
 			}
+
+			System.out.println("Do you want to purchase more product?");
+			System.out.println("1) Yes");
+			System.out.println("2) No");
+
+			choice = sc.nextInt();
 		}
 	}
 }

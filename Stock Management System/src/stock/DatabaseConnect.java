@@ -4,14 +4,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 class DatabaseConnect {
-	Connection conn;
+	private Connection conn = null;
 	
-	DatabaseConnect() {
+	public Connection connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/stockmanagementsystem","root", "");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+		
+		return conn;
 	}
 }

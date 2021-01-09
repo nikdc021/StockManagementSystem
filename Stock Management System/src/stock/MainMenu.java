@@ -3,10 +3,10 @@ package stock;
 import java.util.Scanner;
 
 class MainMenu {
+	private Scanner sc = new Scanner(System.in);
+	private int choice = 0;
+	
 	void menu() {
-		Scanner sc = new Scanner(System.in);
-		int choice = 0;
-
 		while (choice != 4) {
 			System.out.println("---------STOCK MANAGEMENT SYSTEM---------");
 			System.out.println();
